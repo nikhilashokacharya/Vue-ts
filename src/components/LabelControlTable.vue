@@ -4,7 +4,7 @@
       <button class="button" default>Alphabetic</button>
       <button class="button">Categorized</button>
     </div>
-    <div v-for="data in labelInfo" :key="data">
+    <div v-for="data in labelInfo" :key="data.labelName">
       <CustomInput
         v-if="data.type==='input'"
         :data="data"
@@ -33,8 +33,8 @@
 <script lang="ts">
 import { EventBus } from "../components/event-bus";
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { labelData } from "../table/tableData/labelData";
-import { commandButtonData } from "../table/tableData/commandButtonData";
+import { LabelData } from "../table/tableData/labelData";
+import { CommandButtonData } from "../table/tableData/commandButtonData";
 import { userFormData } from "../models/UserFormData";
 import { Mutation, Getter } from "vuex-class";
 import CustomInput from "../table/CustomInput.vue";
@@ -63,17 +63,17 @@ export default class UserFormTable extends Vue {
   mounted() {
     const that = this;
     EventBus.$on("CallControl", (userForm: object, control: object) => {
+      debugger
       that.selectedUserForm = userForm;
       that.selectedOption = control;
-      console.log("selected control", control.type);
       if (that.selectedOption.type === "Label") {
-        that.labelInfo = labelData;
+        const labelObject = new LabelData();
+        that.labelInfo = labelObject.data
       }
       if (that.selectedOption.type === "CommandButton") {
         debugger;
-        console.log("CMD DATA", commandButtonData);
-        that.labelInfo = commandButtonData;
-        console.log("this is command button data", that.labelInfo);
+        const commandButtonObject = new CommandButtonData();
+        that.labelInfo = commandButtonObject.data;
       }
       for (const key1 in userFormData.ID_USERFORM1.controls[0].properties) {
         for (let i = 0; i < that.labelInfo.length; i++) {

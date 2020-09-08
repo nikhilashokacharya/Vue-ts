@@ -4,7 +4,7 @@
       <button class="button" default>Alphabetic</button>
       <button class="button">Categorized</button>
     </div>
-    <div v-for="data in userFormInfo" :key="data">
+    <div v-for="data in userFormInfo" :key="data.labelName">
       <CustomInput
         v-if="data.type==='input'"
         :data="data"
