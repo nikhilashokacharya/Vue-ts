@@ -1,9 +1,10 @@
 <template>
   <div>
     <div class="box grid-design">
-      <input type="text" id="enter" class="font-input"/>
+      <input type="text" id="enter" class="font-input" />
       <a href="#popup12">
-        <button :style="{height: '17px',
+        <button
+          :style="{height: '17px',
     padding: '0px',
     paddingLeft: '1px',
     paddingRight: '2px',
@@ -13,16 +14,15 @@
     borderLeftColor: 'lightgray',
     borderTopColor: 'lightgray',
     outline: 'none',
-    marginLeft: '-3px'}">...</button>
+    marginLeft: '-3px'}"
+        >...</button>
       </a>
     </div>
     <div id="popup12" class="overlay">
       <div class="font-div popup">
         <div class="font-header">
           <span class="span-style">Font</span>
-          <!-- <button style="float:right">X</button> -->
           <a class="close" href="#">
-            <!-- <button style="float:right;position:absolute">&times;</button> -->
             <button class="ui-btn close">
               <svg viewBox="0 0 10 10">
                 <polygon
@@ -33,16 +33,21 @@
           </a>
         </div>
         <hr style="margin:0px" />
-        <div class="font-body" >
-          <div class="wrapper" >
+        <div class="font-body">
+          <div class="wrapper">
             <div class="wrapper-1">
               <div>
                 Font:
                 <br />
                 <input type="text" class="font-input-1" :value="this.font" />
                 <br />
-                <div class="font-first-frame" >
-                  <div v-for="(value,i) of newFont" :key="i" @click="changeFont(i)">{{i}}</div>
+                <div class="font-first-frame">
+                  <div
+                    v-for="(value,i) of newFont"
+                    :key="i"
+                    @click="changeFont(i)"
+                    :style="{'font-family':font}"
+                  >{{i}}</div>
                 </div>
               </div>
               <div>
@@ -77,10 +82,17 @@
                 <div>
                   Font Style:
                   <br />
-                  <input type="text" class="font-input-2" :value="this.fontStyle" />
+                  <input type="text" class="font-input-2" :value="fontStyle" />
                   <br />
-                  <div class="font-second-frame">
-                    <div v-for="(value,i) of temp" :key="i">{{value}}</div>
+                  <div class="font-second-frame" >
+                    <div
+                      v-for="(value,i) of temp"
+                      :key="i"
+                      :style="{'font-family':font,'font-weight':value.includes('Bold')?'bold':value.includes('Black')?'900':value.includes('Light')?'lighter':value.includes('SemiLight')?'300':value.includes('SemiBold')?'600':'','font-style':value.includes('Italic')?'italic':'','font-stretch':value.includes('Narrow')?'ultra-condensed':value.includes('SemiCondensed')?'semi-condensed':value.includes('Condensed')?'condensed':''}"
+                      :ref="'fontStyleRef'.concat(value)"
+                      :id="value"
+                      @click="changeStyle(value)"
+                    >{{value}}</div>
                   </div>
                 </div>
                 <div>
@@ -101,7 +113,7 @@
                     <span>Sample</span>
                   </h1>
                   <div
-                    :style="{'font-family':`${this.font}`,'text-decoration':`${this.dataDecorator}`}"
+                    :style="{'font-family':`${this.font}`,'font-size':`${this.size}`+'px','font-style':`${this.fontStyle1}`,'font-weight':`${this.fontWeight}`,'font-stretch':`${this.fontStretch}`,'text-decoration':`${this.dataDecorator}`}"
                   >AaBbYyZz</div>
                 </div>
               </div>
@@ -144,19 +156,24 @@
 </template>
 
 <script type="ts">
-import {newFont} from '../../models/newFont.ts'
-import fontData from '../../models/fontData.json'
+import { newFont } from "../../models/newFont.ts";
+import fontData from "../../models/fontData.json";
+import { userFormData } from "../../models/UserFormData"
 export default {
   data() {
     return {
       size: 8,
       font: "Arial",
+      fontWeight: "bold",
       fontStyle: "Regular",
+      fontStyle1:"",
+      fontStretch: "condensed",
       dataDecorator: "",
       size1: [8, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72],
-      fontData: fontData,
+      fontData: userFormData.ID_USERFORM1.properties.Font,
       newFont: newFont,
-      temp: newFont["Arial"]
+      temp: newFont["Arial"],
+      data: ""
     };
   },
   methods: {
@@ -180,21 +197,33 @@ export default {
         this.dataDecorator = "underline line-through";
       } else if (checkBox1.checked === true) {
         this.dataDecorator = "line-through";
+        userFormData.ID_USERFORM1.properties.Font.FontStrikethrough = true;
       } else if (checkBox2.checked === true) {
         this.dataDecorator = "underline";
+        userFormData.ID_USERFORM1.properties.Font.FontUnderline = true;
       } else {
         this.dataDecorator = "";
       }
     },
-    changeFont(i){
+    changeFont(i) {
       this.temp = newFont[i];
       this.font = i;
-    }
+    },
+    changeStyle(value) {
+      const refName = 'fontStyleRef'.concat(value);
+      this.fontStyle = value;
+      this.fontStyle1 = this.$refs[refName][0].style.fontStyle;
+      this.fontWeight = this.$refs[refName][0].style.fontWeight;
+      this.fontStretch = this.$refs[refName][0].style.fontStretch;
+      userFormData.ID_USERFORM1.properties.Font.FontName = this.$refs[refName][0].style.fontFamily;
+      userFormData.ID_USERFORM1.properties.Font.FontSize = this.size;
+      userFormData.ID_USERFORM1.properties.Font.FontStyle = this.fontStyle;
+    },
   },
-  mounted(){
-    this.font=this.fontData.FontName;
-    this.fontStyle=this.fontData.FontStyle;
-}
+  mounted() {
+    this.font = this.fontData.FontName;
+    this.fontStyle = this.fontData.FontStyle;
+  },
 };
 </script>
 
@@ -205,7 +234,7 @@ body {
   background-size: cover;
   height: 100vh;
 }
-.font-input{
+.font-input {
   border: none;
   outline: none;
   height: 14px;
