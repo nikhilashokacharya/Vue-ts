@@ -24,7 +24,7 @@
         @focus="focus"
         @blur="blur"
       />
-      <CustomColorTabs v-if="data.type==='color'" :data="data" @blur="blur" />
+      <CustomColorTabs v-if="data.type==='color'" :data="data" />
       <CustomFontDialog v-if="data.type==='font'" :data="data" />
     </div>
   </div>

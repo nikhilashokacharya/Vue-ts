@@ -1,7 +1,7 @@
 <template>
   <div class="custom-colortabs-outer">
       <label class="custom-label-ele">{{data.labelName}}</label>
-       <div class="custom-div-ele"><ColorPallate @blur="blur"/></div>
+       <div class="custom-div-ele"><ColorPallate /></div>
   </div>
 </template>
 

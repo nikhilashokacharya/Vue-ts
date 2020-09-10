@@ -84,7 +84,7 @@
                   <br />
                   <input type="text" class="font-input-2" :value="fontStyle" />
                   <br />
-                  <div class="font-second-frame" >
+                  <div class="font-second-frame">
                     <div
                       v-for="(value,i) of temp"
                       :key="i"
@@ -138,6 +138,7 @@
                 <button
                   style="width:100%;border: 1px solid white;
     box-shadow: -1px -1px grey;"
+                @click="okbutton"
                 >OK</button>
               </div>
               <div>
@@ -158,7 +159,7 @@
 <script type="ts">
 import { newFont } from "../../models/newFont.ts";
 import fontData from "../../models/fontData.json";
-import { userFormData } from "../../models/UserFormData"
+import { userFormData } from "../../models/UserFormData";
 export default {
   data() {
     return {
@@ -166,14 +167,14 @@ export default {
       font: "Arial",
       fontWeight: "bold",
       fontStyle: "Regular",
-      fontStyle1:"",
+      fontStyle1: "",
       fontStretch: "condensed",
       dataDecorator: "",
-      size1: [8, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72],
+      size1: [8, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48],
       fontData: userFormData.ID_USERFORM1.properties.Font,
       newFont: newFont,
       temp: newFont["Arial"],
-      data: ""
+      data: "",
     };
   },
   methods: {
@@ -210,15 +211,20 @@ export default {
       this.font = i;
     },
     changeStyle(value) {
-      const refName = 'fontStyleRef'.concat(value);
+      const refName = "fontStyleRef".concat(value);
       this.fontStyle = value;
       this.fontStyle1 = this.$refs[refName][0].style.fontStyle;
       this.fontWeight = this.$refs[refName][0].style.fontWeight;
       this.fontStretch = this.$refs[refName][0].style.fontStretch;
-      userFormData.ID_USERFORM1.properties.Font.FontName = this.$refs[refName][0].style.fontFamily;
+      userFormData.ID_USERFORM1.properties.Font.FontName = this.$refs[
+        refName
+      ][0].style.fontFamily;
       userFormData.ID_USERFORM1.properties.Font.FontSize = this.size;
       userFormData.ID_USERFORM1.properties.Font.FontStyle = this.fontStyle;
     },
+    okbutton(){
+      
+    }
   },
   mounted() {
     this.font = this.fontData.FontName;
@@ -254,7 +260,8 @@ h1 {
 
 .box {
   display: grid;
-  grid-template-columns: 90% 10%;
+  grid-template-columns: 0px 15px;
+  float: right;
   background: rgba(255, 255, 255, 0.2);
   text-align: right;
 }
